@@ -2,7 +2,7 @@ import { NextResponse, NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
 
-const sec_key = "lokesharsh43";
+const sec_key = process.env.SECRET_KEY;
 
 const privateRoutes = ['/create', '/blogs', '/blog/[id]'];
 

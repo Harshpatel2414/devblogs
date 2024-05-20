@@ -44,7 +44,7 @@ export const POST = async (req, res) => {
 }
 
 const maxAge = 24 * 60 * 60;
-const sec_key = "lokesharsh43";
+const sec_key = process.env.SECRET_KEY;
 
 const createToken = (id) => {
   return jwt.sign({ id }, sec_key, {
