@@ -23,25 +23,29 @@ const Navbar = () => {
     }
 
     return (
-        <nav className='flex relative items-center px-5 lg:px-20 h-20 justify-between bg-rose-500 dark:bg-zinc-800 text-gray-300 drop-shadow-lg'>
+        <nav className='flex fixed top-0 left-0 w-full z-20 items-center px-5 lg:px-20 h-20 justify-between bg-rose-500 dark:bg-zinc-800 text-gray-300 drop-shadow-lg'>
             <h1 className='text-zinc-800 font-bold dark:text-red-500 text-xl tracking-wide'>Dev<span className='text-zinc-100 '>Blogs</span>
             </h1>
             <ul className='md:flex space-x-5 hidden dark:text-rose-400'>
                 <li>
                     <Link href='/'>Home</Link>
                 </li>
+                {currentUser && <li>
+                    <Link href='/userblogs'>Blogs</Link>
+                </li>}
                 <li>
                     <Link className={`${!currentUser ? "line-through" : ''}`} href='/create'>Create</Link>
                 </li>
+
                 <li>
-                    <Link href='/create'>About</Link>
+                    <Link href='/about'>About</Link>
                 </li>
             </ul>
             <div className='md:hidden' onClick={() => setMenu((prev) => !prev)}>
                 <FaBars className='w-7 h-7 text-zinc-800 dark:text-red-500' />
             </div>
             {currentUser ? <div className='hidden md:flex items-center font-semibold gap-4'>
-                <span>{currentUser?.username}</span>
+                <span className='text-rose-400'>{currentUser ? currentUser.username : "user"}</span>
                 <button onClick={handleLogout} className='py-1 px-5 rounded-lg bg-rose-500'>Logout</button>
             </div> : <div className='hidden md:flex items-center gap-4'>
                 <Link
@@ -58,10 +62,13 @@ const Navbar = () => {
                 </Link>
             </div>}
 
-            {menu && <ul className='flex z-20 p-5 rounded-lg w-60 absolute top-[85px] right-2 flex-col gap-2 dark:bg-neutral-800 bg-rose-50 drop-shadow-lg text-zinc-500'>
+            {menu && <ul className='flex z-30 p-5 rounded-lg w-60 absolute top-[85px] right-2 flex-col gap-2 dark:bg-neutral-800 bg-rose-50 drop-shadow-lg text-zinc-500'>
 
                 <Link onClick={() => setMenu((prev) => !prev)} href={'/'}>Home</Link>
-                <Link className={`${!currentUser ? "line-through" : ''}`} onClick={() => setMenu((prev) => !prev)} href={'/create'}>Create</Link>
+                {currentUser && <div className='flex flex-col gap-2'>
+                    <Link onClick={() => setMenu((prev) => !prev)} href={'/userblogs'}>Blogs</Link>
+                    <Link onClick={() => setMenu((prev) => !prev)} href={'/create'}>Create</Link>
+                </div>}
                 <Link onClick={() => setMenu((prev) => !prev)} href={'/about'}>About</Link>
                 {!currentUser ? <div className='flex flex-col gap-2'>
                     <Link onClick={() => setMenu((prev) => !prev)} className='underline text-rose-500' href={'/login'}>Login</Link>

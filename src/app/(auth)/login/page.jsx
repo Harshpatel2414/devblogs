@@ -33,7 +33,8 @@ const Login = () => {
     })
     let data = await res.json()
     if (res.ok) {
-      setCurrentUser(data)
+      setCurrentUser(data.user)
+      console.log(data);
       toast.success('Logged in successfully');
       router.push('/')
     }

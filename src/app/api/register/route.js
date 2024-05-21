@@ -14,7 +14,9 @@ export const POST = async (req, res) => {
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
-            return NextResponse.json({ error: 'User already exists' });
+            return NextResponse.json({ error: 'User already exists' },{
+                status: 400
+            });
         }
 
         // Hash password
@@ -37,14 +39,18 @@ export const POST = async (req, res) => {
             maxAge: 24 * 60 * 60
         });
 
-        return NextResponse.json(savedUser);
+        return NextResponse.json(savedUser,{
+          status: 201
+        });
     } catch (error) {
-        console.log(error);
+       return NextResponse.json(error,{
+              status: 500
+       });
     }
 }
 
 const maxAge = 24 * 60 * 60;
-const sec_key = process.env.SECRET_KEY;
+const sec_key = process.env.NEXT_PUBLIC_SECRET_KEY;
 
 const createToken = (id) => {
   return jwt.sign({ id }, sec_key, {

@@ -6,7 +6,7 @@ import React from 'react'
 import toast from 'react-hot-toast'
 import { FaEdit, FaTrash } from 'react-icons/fa'
 
-const Post = ({ author, createdAt, title, description, image, _id }) => {
+const Post = ({ createdAt, title, description, image, _id }) => {
     const { currentUser } = useAuth();
     const router = useRouter();
     const handleDelete = async () => {
@@ -57,20 +57,20 @@ const Post = ({ author, createdAt, title, description, image, _id }) => {
             <div className='w-full flex items-center gap-4 border-b border-zinc-500 h-fit pb-2'>
                 <div className='flex items-center gap-4 w-full'>
                     <div className='flex flex-col text-sm'>
-                        <span>{author ? author.username : "user"}</span>
+                        <span>{currentUser.username}</span>
                         <span className='text-zinc-500'>Posted on {createdAt}</span>
                     </div>
                 </div>
-                {currentUser && <div className='flex gap-4 items-center'>
-                    {currentUser._id === author?._id && <div className='flex gap-4 items-center'>
+                <div className='flex gap-4 items-center'>
+                    <div className='flex gap-4 items-center'>
                         <Link href={`/create/${_id}`}>
                             <FaEdit className='w-6 h-6 text-red-400' />
                         </Link>
                         <span onClick={handleDelete}>
                             <FaTrash className='w-5 h-5 text-red-400' />
                         </span>
-                    </div>}
-                </div>}
+                    </div>
+                </div>
 
             </div>
             <div className='flex flex-col  md:flex-row-reverse gap-2 h-full w-full pt-2'>

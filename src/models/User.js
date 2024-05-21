@@ -16,7 +16,8 @@ const UserSchema = new mongoose.Schema({
     },
     blogs: [{
         type: Schema.Types.ObjectId,
-        ref: 'Blog'
+        ref: 'Blog',
+        default: []
     }]
 }, { timestamps: true })
 

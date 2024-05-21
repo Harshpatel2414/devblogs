@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { FaImage, FaPlus, FaVideo } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 const Update = ({ params }) => {
     const router = useRouter();
@@ -18,7 +19,9 @@ const Update = ({ params }) => {
     const [image, setImage] = useState(null);
     const { currentUser } = useAuth();
     const [loading, setLoading] = useState(false);
-
+    if (!currentUser) {
+        router.push('/login');
+    }
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch(`/api/blog/${id}`);
@@ -32,7 +35,7 @@ const Update = ({ params }) => {
             });
         }
         fetchData();
-    }, [])
+    }, [id])
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -102,10 +105,11 @@ const Update = ({ params }) => {
                         onChange={(e) => setTitle(e.target.value)}
                     />
                 </div>
-                {image && (
-                    <div className="w-full h-auto py-5 relative">
-                        <img src={image.preview} alt="Preview" className="mt-2 h-auto lg:max-h-[480px]" />
+                {image && (<div>
+                    <div className="w-auto h-full dark:bg-zinc-900 min-h-[360px] md:max-h-[480px] lg:h-[480px] relative">
+                        <Image fill src={image.preview} alt="Preview" className="w-auto h-auto md:max-h-[480px] lg:h-[480px] object-contain object-center" />
                     </div>
+                </div>
                 )}
                 {media && (
                     <div className="w-full h-auto py-5 relative">

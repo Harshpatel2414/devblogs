@@ -20,9 +20,11 @@ export default function RootLayout({ children }) {
         <AuthContextProvider>
           <Toaster position="top-center" />
           <Navbar />
+          <div className="mt-20 w-full h-full">
           <Suspense fallback={<Loading />}>
             {children}
           </Suspense>
+          </div>
         </AuthContextProvider>
       </body>
     </html>

@@ -20,18 +20,17 @@ export const GET = async (req, res) => {
             status: 404
          });
       }
-      if (blog.comments && blog.comments.length >= 1) {
-         blog= await 
-         await Blog.findById(blogId)
-         .populate('author', 'username email')
-         .populate({
-            path: 'comments',
-            populate: {
-               path: 'author',
-               select: 'username email'
-            }
-         })
-         .exec();
+      if (blog.comments && blog.comments.length > 0) {
+         blog = await Blog.findById(blogId)
+            .populate({
+               path: 'comments',
+               populate: {
+                  path: 'author',
+                  select: 'username email'
+               }
+            })
+            .populate('author', 'username email')
+            .exec();
       }
       return NextResponse.json(blog, {
          status: 200

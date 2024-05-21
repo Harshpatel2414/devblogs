@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useState } from "react";
 import ReactQuill from "react-quill";
@@ -8,6 +8,7 @@ import { FaImage, FaPlus, FaVideo } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import { imageStorageLink } from "@/db/firebase";
+import Image from "next/image";
 
 const Create = () => {
     const router = useRouter();
@@ -80,7 +81,7 @@ const Create = () => {
             toast.error('Error publishing blog: ' + error.message);
         }
     };
-
+    
     return (
         <div className="flex flex-col items-center p-5 dark:bg-zinc-950  w-full min-h-dvh mx-auto pt-20">
             <div className="flex flex-col gap-5 w-full md:w-3/4 lg:w-2/3">
@@ -94,15 +95,17 @@ const Create = () => {
                         onChange={(e) => setTitle(e.target.value)}
                     />
                 </div>
-                {image && (
-                    <div className="w-full h-auto py-5 relative">
-                        <img src={image.preview} alt="Preview" className="mt-2 h-auto lg:max-h-[480px]" />
-                        <button onClick={() => setImage(null)} className="py-1 px-5 w-fit border border-rose-500 text-red-500 mt-3 rounded-lg">Remove</button>
+                {image && (<div>
+                    <div className="w-auto h-full dark:bg-zinc-900 min-h-[360px] md:max-h-[480px] lg:h-[480px] relative">
+
+                        <Image fill src={image.preview} alt="Preview" className="w-auto h-auto md:max-h-[480px] lg:h-[480px] object-contain object-center" />
                     </div>
+                    <button onClick={() => setImage(null)} className="py-1 px-5 w-fit border border-rose-500 text-red-500 mt-3 rounded-lg relative">Remove</button>
+                </div>
                 )}
                 {media && (
                     <div className="w-full h-auto py-5 relative">
-                        <video controls className="mt-2 w-full lg:max-h-[480px]">
+                        <video controls className="mt-2 w-full md:max-h-[360px] lg:max-h-[480px]">
                             <source src={media.preview} type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>

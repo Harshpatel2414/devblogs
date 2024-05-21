@@ -15,6 +15,7 @@ const Blog = ({ params }) => {
     const { currentUser } = useAuth();
     const [comment, setComment] = useState('');
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch(`/api/blog/${id}`);
@@ -23,9 +24,10 @@ const Blog = ({ params }) => {
             console.log(data);
         }
         fetchData();
-    }, [])
+    },[id])
 
     const addComment = async () => {
+        setLoading(true);
         const res = await fetch(`/api/comment`, {
             method: 'POST',
             headers: {
@@ -35,6 +37,7 @@ const Blog = ({ params }) => {
         });
         const data = await res.json();
         if (res.ok) {
+            setLoading(false);
             toast.success('Comment added successfully');
             setComment('')
             router.refresh()
@@ -59,28 +62,31 @@ const Blog = ({ params }) => {
                     </div>
                     <div className="flex items-center gap-2 hover:cursor-pointer">
                         <FaComment />
-                        <span>Comments </span>
+                        <span>{blog?.comments.length} </span>
                     </div>
-                    <div className="flex items-center gap-2 hover:cursor-pointer">
-                        <FaEdit />
-                        <Link href={`/create/${id}`}>Edit</Link>
-                    </div>
-                    <div className="flex items-center gap-2 hover:cursor-pointer">
-                        <FaTrash />
-                        <span>Delete</span>
-                    </div>
+                    {currentUser && currentUser._id === blog?.author?._id && <div className="flex gap-2">
+                        <div className="flex items-center gap-2 hover:cursor-pointer">
+                            <FaEdit />
+                            <Link href={`/create/${id}`}>Edit</Link>
+                        </div>
+                        <div className="flex items-center gap-2 hover:cursor-pointer">
+                            <FaTrash />
+                            <span>Delete</span>
+                        </div>
+                    </div>}
                 </div>
-                <div>
-                    <img src="/images/example.png" alt="blog" className="w-full h-auto py-5 object-cover object-center" />
-                </div>
-                <div className="mb-2 text-zinc-600" dangerouslySetInnerHTML={{ __html: blog?.description }}></div>
+                {blog?.image.length > 2 && <div className="w-auto h-fit dark:bg-zinc-900 min-h-[300px] md:max-h-[480px] lg:h-[480px] relative my-5">
+                    <Image fill src={blog?.image} alt="/images/example.png" className="w-full h-full object-contain object-center" />
+                </div>}
+
+                <div className="my-3 text-zinc-600" dangerouslySetInnerHTML={{ __html: blog?.description }}></div>
                 <div className="w-full border-t border-zinc-500 py-2">
                     <div className="flex gap-4 items-center mb-2">
                         <h1 className="text-lg">Add comments</h1>
                         {!currentUser && <Link className=" underline text-sm text-red-500" href="/login">Login</Link>}
                     </div>
                     <textarea className="p-2 resize-none w-full outline-none bg-zinc-100 dark:text-gray-100 dark:bg-zinc-600" rows={2} type="text" onChange={(e) => setComment(e.target.value)} placeholder="type here..." />
-                    <button disabled={!currentUser} onClick={addComment} className="py-1 px-5 bg-rose-400 rounded-md mt-2 cursor-pointer disabled:opacity-60">Add</button>
+                    <button disabled={!currentUser} onClick={addComment} className="py-1 px-5 bg-rose-400 rounded-md mt-2 cursor-pointer disabled:opacity-60">{loading?"Adding...":"Add"}</button>
                     <button onClick={() => setOpencomment((prev) => !prev)} className="py-1 px-5 underline cursor-pointer">view</button>
                 </div>
             </div>

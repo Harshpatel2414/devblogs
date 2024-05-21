@@ -4,7 +4,7 @@ import { cookies } from 'next/headers';
 
 const sec_key = process.env.SECRET_KEY;
 
-const privateRoutes = ['/create', '/blogs', '/blog/[id]'];
+const privateRoutes = ['/create','/create/[id]', '/blogs'];
 
 export default function middleware(req, res) {
 

@@ -7,12 +7,11 @@ import toast from "react-hot-toast";
 import { FaEye } from "react-icons/fa";
 
 const Register = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: ''
-  });
+  const[email, setEmail] = useState('');
+  const[password, setPassword] = useState('');
+  const[username, setUsername] = useState('');
   const [passview, setPassview] = useState('password')
+
   const { setCurrentUser } = useAuth();
   const router = useRouter();
 
@@ -23,22 +22,24 @@ const Register = () => {
       setPassview('text')
     }
   }
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  }
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     const res = await fetch('api/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify({
+        username,
+        email,
+        password
+      })
     })
     if (res.ok) {
       const data = await res.json();
-      setCurrentUser(data);
+      setCurrentUser(data.user);
+      console.log(data);
       toast.success('Account created successfully');
       router.push('/');
     }
@@ -58,8 +59,8 @@ const Register = () => {
           placeholder='username'
           required
           className='p-2 rounded w-full outline-none text-zinc-800 border-b-2'
-          value={formData.username}
-          onChange={handleChange}
+          value={username}
+          onChange={e=>setUsername(e.target.value)}
         />
         <input
           type='email'
@@ -67,14 +68,14 @@ const Register = () => {
           placeholder='email'
           required
           className='p-2 rounded w-full outline-none text-zinc-800 border-b-2'
-          value={formData.email}
-          onChange={handleChange}
+          value={email}
+          onChange={e=>setEmail(e.target.value)}
         />
         <div className="flex w-full items-center bg-white rounded border-b-2">
           <input
             className='p-2 rounded w-full outline-none text-zinc-800 '
-            value={formData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={e=>setPassword(e.target.value)}
             type={passview}
             placeholder='password' required
           />
