@@ -1,25 +1,28 @@
 "use client";
 
-import { useState } from "react";
-import ReactQuill from "react-quill";
+import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import "react-quill/dist/quill.bubble.css";
 import { useRouter } from "next/navigation";
 import { FaImage, FaPlus, FaVideo } from "react-icons/fa";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
-import { imageStorageLink } from "@/db/firebase";
 import Image from "next/image";
+import { imageStorageLink } from "@/db/firebase";
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const Create = () => {
-    const router = useRouter();
 
-    const [open, setOpen] = useState(false);
-    const [title, setTitle] = useState("");
-    const [desc, setDesc] = useState("");
-    const [media, setMedia] = useState("");
-    const [image, setImage] = useState(null);
-    const { currentUser } = useAuth();
-    const [loading, setLoading] = useState(false);
+    let [open, setOpen] = useState(false);
+    let [title, setTitle] = useState("");
+    let [desc, setDesc] = useState("");
+    let [media, setMedia] = useState("");
+    let [image, setImage] = useState(null);
+    let [loading, setLoading] = useState(false);
+
+    let { currentUser } = useAuth();
+    let router = useRouter();
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -81,9 +84,9 @@ const Create = () => {
             toast.error('Error publishing blog: ' + error.message);
         }
     };
-    
+
     return (
-        <div className="flex flex-col items-center p-5 dark:bg-zinc-950  w-full min-h-dvh mx-auto pt-20">
+        <div className="flex flex-col items-center p-5 dark:bg-zinc-950  w-full min-h-dvh mx-auto mt-10 pt-20">
             <div className="flex flex-col gap-5 w-full md:w-3/4 lg:w-2/3">
                 <div>
                     <h1 className="text-lg text-rose-400">Add Title</h1>

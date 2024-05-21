@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.bubble.css";
 import { useRouter } from "next/navigation";
 import { FaImage, FaPlus, FaVideo } from "react-icons/fa";
@@ -9,19 +8,25 @@ import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import Image from "next/image";
 
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
 const Update = ({ params }) => {
-    const router = useRouter();
     const id = params.id;
+
     const [open, setOpen] = useState(false);
     const [title, setTitle] = useState("");
     const [desc, setDesc] = useState("");
     const [media, setMedia] = useState("");
     const [image, setImage] = useState(null);
-    const { currentUser } = useAuth();
     const [loading, setLoading] = useState(false);
+    
+    const { currentUser } = useAuth();
+    const router = useRouter();
+
     if (!currentUser) {
         router.push('/login');
     }
+    
     useEffect(() => {
         const fetchData = async () => {
             const res = await fetch(`/api/blog/${id}`);
